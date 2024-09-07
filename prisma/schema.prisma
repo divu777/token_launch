@@ -12,3 +12,61 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id            Int               @id @default(autoincrement())
+  name          String
+  publicKey     String            @unique
+  createdTokens Token[]
+  tokenBalances UserTokenBalance[]
+  sentTx        Transaction[]     @relation("SentTransactions")
+  receivedTx    Transaction[]     @relation("ReceivedTransactions")
+  createdAt     DateTime          @default(now())
+}
+
+model Token {
+  id               Int               @id @default(autoincrement())
+  tokenMintAddress String            @unique
+  name             String
+  symbol           String
+  imageUrl         String            @unique
+  description      String
+  supply           BigInt
+  decimals         Int               @default(9)
+  creator          User              @relation(fields: [creatorId], references: [id])
+  creatorId        Int
+  balances         UserTokenBalance[]
+  transactions     Transaction[]
+  createdAt        DateTime          @default(now())
+}
+
+model UserTokenBalance {
+  id        Int    @id @default(autoincrement())
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int
+  token     Token  @relation(fields: [tokenId], references: [id])
+  tokenId   Int
+  balance   BigInt
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, tokenId])
+}
+
+
+model Transaction {
+  id               Int      @id @default(autoincrement())
+  tokenMintAddress String
+  token            Token    @relation(fields: [tokenMintAddress], references: [tokenMintAddress])
+  fromAddress      User     @relation("SentTransactions", fields: [fromAdd], references: [publicKey])
+  fromAdd          String
+  toAddress        User     @relation("ReceivedTransactions", fields: [toAdd], references: [publicKey])
+  toAdd            String
+  amount           BigInt
+  status           String   @default("pending")
+  timestamp        DateTime @default(now())
+
+  @@index([tokenMintAddress])
+  @@index([fromAdd])
+  @@index([toAdd])
+}
