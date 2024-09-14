@@ -396,12 +396,6 @@ export default function WalletContent() {
     }
   };
 
-  const sendTokens = async (
-    tokenAccPublickey: string,
-    mintPublicKey: string,
-    ownerofTokenPublicKey: String
-  ) => {};
-
   useEffect(() => {
     if (connection && publicKey) {
       const getInfo = async () => {
