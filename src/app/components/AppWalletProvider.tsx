@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import "../globals.css";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
@@ -10,6 +10,8 @@ import {
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+
+
 
 export default function AppWalletProvider({
   children,
@@ -23,7 +25,9 @@ export default function AppWalletProvider({
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets}>
-        <WalletModalProvider>{children}</WalletModalProvider>
+        <WalletModalProvider>
+          {children}
+        </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   );

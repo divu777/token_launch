@@ -3,10 +3,6 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import {
-  WalletDisconnectButton,
-  WalletMultiButton,
-} from "@solana/wallet-adapter-react-ui";
-import {
   LAMPORTS_PER_SOL,
   PublicKey,
   Keypair,
@@ -425,97 +421,91 @@ export default function WalletContent() {
   }, [connection, publicKey]);
 
   return (
-    <>
-      <div className="min-h-screen text-white">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 p-4">
-          <div className="col-span-1 lg:col-start-2 lg:col-end-4 rounded-lg bg-[#2a302f] p-4">
-            <div className="flex justify-between items-center">
-              <div className="text-3xl font-semibold">account info ✨</div>
+    <div className="min-h-screen text-white">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 p-4">
+        <div className="col-span-1 lg:col-start-2 lg:col-end-4 rounded-lg bg-[#2a302f] p-4">
+          <div className="flex justify-between items-center">
+            <div className="text-3xl font-semibold">account info ✨</div>
 
-              <WalletMultiButtonDynamic />
-              <WalletDisconnectButtonDynamic />
-            </div>
-
-            <div className="mt-8 bg-[#222524] border-2 border-gray-500 rounded-lg p-2">
-              <ul className="p-2">
-                <li className="flex justify-between">
-                  <div className="tracking-wider">Wallet is connected</div>
-                  <div className="text-helius-orange italic font-semibold">
-                    {publicKey ? "yes" : "no"}
-                  </div>
-                </li>
-
-                <li className="text-sm mt-4 flex justify-between">
-                  <div className="tracking-wider">Balance</div>
-                  <div className="text-helius-orange italic font-semibold">
-                    {balance !== null ? balance : "Connect First"}
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div className="mt-4">
-              <button
-                onClick={createmintaccont}
-                className="bg-helius-orange text-black font-bold py-2 px-4 rounded"
-                disabled={!publicKey}
-              >
-                Create Mint Account
-              </button>
-              <button
-                onClick={createATAaccount}
-                className="bg-helius-orange text-black font-bold py-2 px-4 rounded"
-                disabled={!publicKey}
-              >
-                Create Associated Token Account
-              </button>
-              <button
-                onClick={mintTokens}
-                className="bg-helius-orange text-black font-bold py-2 px-4 rounded"
-                disabled={!publicKey}
-              >
-                Mint TOkenss
-              </button>
-
-              <div>
-                <h2>Create Your NFT</h2>
-
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-
-                <button
-                  onClick={handleSpltoken}
-                  className="bg-helius-orange text-black font-bold py-2 px-4 rounded"
-                  disabled={!publicKey}
-                >
-                  createNFTTTTTT
-                </button>
-              </div>
-            </div>
-
-            {mintAddress && (
-              <div className="mt-4 bg-[#222524] border-2 border-gray-500 rounded-lg p-2">
-                <div className="text-sm">Token Mint Address:</div>
-                <div className="text-helius-orange italic font-semibold break-all">
-                  {mintAddress.toBase58()}
-                </div>
-              </div>
-            )}
-
-            {ataAddress && (
-              <div className="mt-4 bg-[#222524] border-2 border-gray-500 rounded-lg p-2">
-                <div className="text-sm">Associated Token Account Address:</div>
-                <div className="text-helius-orange italic font-semibold break-all">
-                  {ataAddress.toBase58()}
-                </div>
-              </div>
-            )}
+            <WalletMultiButtonDynamic />
+            <WalletDisconnectButtonDynamic />
           </div>
+
+          <div className="mt-8 bg-[#222524] border-2 border-gray-500 rounded-lg p-2">
+            <ul className="p-2">
+              <li className="flex justify-between">
+                <div className="tracking-wider">Wallet is connected</div>
+                <div className="text-helius-orange italic font-semibold">
+                  {publicKey ? "yes" : "no"}
+                </div>
+              </li>
+
+              <li className="text-sm mt-4 flex justify-between">
+                <div className="tracking-wider">Balance</div>
+                <div className="text-helius-orange italic font-semibold">
+                  {balance !== null ? balance : "Connect First"}
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div className="mt-4">
+            <button
+              onClick={createmintaccont}
+              className="bg-helius-orange text-black font-bold py-2 px-4 rounded"
+              disabled={!publicKey}
+            >
+              Create Mint Account
+            </button>
+            <button
+              onClick={createATAaccount}
+              className="bg-helius-orange text-black font-bold py-2 px-4 rounded"
+              disabled={!publicKey}
+            >
+              Create Associated Token Account
+            </button>
+            <button
+              onClick={mintTokens}
+              className="bg-helius-orange text-black font-bold py-2 px-4 rounded"
+              disabled={!publicKey}
+            >
+              Mint TOkenss
+            </button>
+
+            <div>
+              <h2>Create Your NFT</h2>
+
+              <input type="file" accept="image/*" onChange={handleFileChange} />
+
+              <button
+                onClick={handleSpltoken}
+                className="bg-helius-orange text-black font-bold py-2 px-4 rounded"
+                disabled={!publicKey}
+              >
+                createNFTTTTTT
+              </button>
+            </div>
+          </div>
+
+          {mintAddress && (
+            <div className="mt-4 bg-[#222524] border-2 border-gray-500 rounded-lg p-2">
+              <div className="text-sm">Token Mint Address:</div>
+              <div className="text-helius-orange italic font-semibold break-all">
+                {mintAddress.toBase58()}
+              </div>
+            </div>
+          )}
+
+          {ataAddress && (
+            <div className="mt-4 bg-[#222524] border-2 border-gray-500 rounded-lg p-2">
+              <div className="text-sm">Associated Token Account Address:</div>
+              <div className="text-helius-orange italic font-semibold break-all">
+                {ataAddress.toBase58()}
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
