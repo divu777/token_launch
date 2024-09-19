@@ -1,53 +1,51 @@
 import prisma from "@/db/db";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { error } from "console";
+import nacl from "tweetnacl";
+import { PublicKey } from "@solana/web3.js";
 
-// sign with wallet
-// signing the message
 export async function POST(req: NextRequest) {
   try {
-    const userExist = await prisma.user.findUnique({
-      where: {
-        publicKey: "9BKUwj82Nbxwspu3YU6BNza1JxonC3vLxqcif9YJrhtk",
-      },
-    });
+    const body = await req.json();
+    const { signature, publicKey } = body;
+    const message = new TextEncoder().encode("Sign into mechanical turk");
 
-    if (userExist) {
-      const token = jwt.sign(
-        {
-          userId: userExist.id,
-          walletAddress: userExist.publicKey,
-        },
-        process.env.NEXT_SECRET!
+    const result = nacl.sign.detached.verify(
+      message,
+      new Uint8Array(signature),
+      new PublicKey(publicKey).toBytes()
+    );
+
+    if (!result) {
+      return NextResponse.json(
+        { message: "Signature verification failed" },
+        { status: 400 }
       );
-      return Response.json({
-        token: token,
-      });
     }
 
-    const user = await prisma.user.create({
-      data: {
-        name: "divakar",
-        publicKey: "9BKUwj82Nbxwspu3YU6BNza1JxonC3vLxqcif9YJrhtk",
+    const user = await prisma.user.upsert({
+      where: { wallet: publicKey },
+      update: {},
+      create: {
+        name: "daddy",
+        wallet: publicKey,
       },
     });
+
     const token = jwt.sign(
       {
         userId: user.id,
-        walletAddress: "9BKUwj82Nbxwspu3YU6BNza1JxonC3vLxqcif9YJrhtk",
+        walletAddress: publicKey,
       },
       process.env.NEXT_SECRET!
     );
 
-    return Response.json({
-      token: token,
-    });
-  } catch (e) {
-    console.log(error);
-    return Response.json({
-      message: "error in Signing up user",
-      statuscode: 500,
-    });
+    return NextResponse.json({ token });
+  } catch (error) {
+    console.error("Authentication error:", error);
+    return NextResponse.json(
+      { message: "Error in authenticating user" },
+      { status: 500 }
+    );
   }
 }

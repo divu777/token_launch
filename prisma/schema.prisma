@@ -20,8 +20,10 @@ model User {
 
 model Token {
   id        Int      @id @default(autoincrement())
-  name      String
-  symbol    String
+  name      String  @unique
+  symbol    String @unique
+  description String 
+  imageUrl String @unique
   amount    Int      // Store as integer
   decimals  Int      // Number of decimal places
   creatorId Int      // Foreign key

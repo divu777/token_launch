@@ -500,7 +500,7 @@ export default function WalletContent() {
               <div className="mt-4 bg-[#222524] border-2 border-gray-500 rounded-lg p-2">
                 <div className="text-sm">Token Mint Address:</div>
                 <div className="text-helius-orange italic font-semibold break-all">
-                  {mintAddress.toBase58()}
+                  {mintAddress.toString()}
                 </div>
               </div>
             )}
