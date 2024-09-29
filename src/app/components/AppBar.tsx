@@ -1,4 +1,5 @@
 "use client";
+import '@solana/wallet-adapter-react-ui/styles.css';
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -24,17 +25,13 @@ export default function AppBar() {
   
 
   return (
-    <div>
-     
-      <div className="">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-white z-50 relative"> {/* Added z-50 */}
+
+
+        <div className=" mx-auto px-4 sm:px-6 lg:px-4 ">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <Link href="/" className="flex-shrink-0">
-                <span className="text-2xl font-bold text-primary">
-                  CryptoApp
-                </span>
-              </Link>
+              
               <div className="hidden md:block ml-10 flex items-baseline space-x-4">
                 {navItems.map((item) => (
                   <Link
@@ -52,7 +49,12 @@ export default function AppBar() {
               </div>
             </div>
             <div className="hidden md:block">
-              <WalletMultiButton className="!bg-primary hover:!bg-primary/90 text-primary-foreground" />
+              <WalletMultiButton className="!bg-primary hover:!bg-primary/90 text-primary-foreground" 
+              style={{
+                backgroundColor:'black'
+                
+              }}
+              />
             </div>
             <div className="md:hidden flex items-center">
               <Button
@@ -93,6 +95,6 @@ export default function AppBar() {
           </div>
         )}
       </div>
-    </div>
+    
   );
 }

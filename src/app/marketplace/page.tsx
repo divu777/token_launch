@@ -79,6 +79,7 @@ export default function NFTCollection() {
 
   return (
     <div className="container mx-hidden p-4">
+      <AppBar />
       <div className="flex justify-between mb-4">
         <Input
           type="text"
