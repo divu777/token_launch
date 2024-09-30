@@ -1,7 +1,7 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
-
+import CardImg2 from "../../../public/img2.png";
 export function Example() {
   return (
     <Carousel
@@ -27,7 +27,7 @@ import {
 export function CarouselDemo() {
   return (
     <Carousel
-      className="w-full max-w-5xl"
+      className="w-4/5 "
       plugins={[
         Autoplay({
           delay: 2000,
@@ -40,7 +40,7 @@ export function CarouselDemo() {
             <div className="p-1 h-[600px]">
               <Card className="h-full">
                 <CardContent className="flex aspect-rectangle items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{index + 1}</span>
+                  <img src={CardImg2.src} alt="" />
                 </CardContent>
               </Card>
             </div>
