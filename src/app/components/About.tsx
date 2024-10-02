@@ -1,17 +1,23 @@
 "use client"
-import { motion } from 'framer-motion';
+import { motion ,useInView } from 'framer-motion';
 import React from 'react'
 import CardImg2 from "../../../public/img2.png";
+import { useRef } from 'react';
 
 const About = () => {
+    const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
   return (
     <div className="h-screen flex flex-col justify-between">
       <div className="relative flex justify-end items-center   h-2/3">
-
         <motion.img
-          initial={{ x: -250 }}
-          animate={{ x: 0 }}
-          transition={{ duration: 1 }}
+          ref={ref}
+          initial={{ x: -250 }} // Start position
+          animate={{ x: isInView ? 0 : -250 }} // Animate to 0 only if in view
+          transition={{
+            duration: 1,
+            delay: isInView ? 0.5 : 0, // Delay when in view
+          }}
           src={CardImg2.src}
           alt=""
           className="h-96 absolute top-20 left-40 "

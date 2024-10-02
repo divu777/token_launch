@@ -20,6 +20,7 @@ export default function AppBar() {
     { name: "Home", href: "/landing" },
     { name: "Marketplace", href: "/marketplace" },
     { name: "Dashboard", href: "/dashboard" },
+    {name:"Generator",href:"/generator"}
   ];
 
   
