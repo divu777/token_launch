@@ -163,7 +163,7 @@ export default function NFTCollection() {
           </PaginationContent>
         </Pagination>
       </div>
-      <Footer />
+     
     </div>
   );
 }

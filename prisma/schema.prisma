@@ -23,7 +23,7 @@ model Token {
   name      String  @unique
   symbol    String @unique
   description String 
-  imageUrl String @unique
+  imageUrl String 
   amount    Int      // Store as integer
   decimals  Int      // Number of decimal places
   creatorId Int      // Foreign key

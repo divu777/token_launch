@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
         userId: user.id,
         walletAddress: publicKey,
       },
-      process.env.NEXT_SECRET!
+      process.env.NEXT_PUBLIC_SECRET!
     );
 
     return NextResponse.json({ token });

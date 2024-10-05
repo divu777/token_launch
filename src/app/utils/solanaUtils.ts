@@ -83,6 +83,7 @@ export const createMintAccount = async (
     // let mintAccount = await getMint(connection, mintAddress!);
   } catch (error) {
     console.error("Failed to create token mint:", error);
+    throw error;
   }
 };
 
@@ -145,6 +146,7 @@ export const createATAAccount = async (
     return ataAddress;
   } catch (error) {
     console.error("Failed to create ATA:", error);
+    throw error;
   }
 };
 
@@ -201,6 +203,7 @@ export const mintTokens = async (
     console.log(`Transaction signature: ${signature}`);
   } catch (error) {
     console.error("Failed to mint tokens:", error);
+    throw error;
   }
 };
 
@@ -271,6 +274,7 @@ export const createMetadata = async (
     console.log("Metadata PDA:", metadataPda.toBase58());
   } catch (error) {
     console.error("Error creating metadata:", error);
+    throw error;
   }
 };
 

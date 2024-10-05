@@ -4,7 +4,18 @@ import prisma from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 export async function GET(req: NextRequest) {
-  const userId = req.headers.get("userId");
+  const token = req.headers.get("Authorization")?.replace("Bearer ", "");
+
+    if (!token) {
+      console.log("No token found in req headers");
+      return NextResponse.json(
+        { message: "You are not logged in" },
+        { status: 401 }
+      );
+    }
+
+    const decoded = jwt.verify(token, process.env.NEXT_PUBLIC_SECRET!);
+    const userId = (<Payload>decoded).userId;
   try {
     const userTokens = await prisma.user.findUnique({
       where: { id: parseInt(userId as string, 10) }, // Ensure userId is converted to a number if required

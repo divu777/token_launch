@@ -5,22 +5,50 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
 } from "@solana/web3.js";
-import { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { Payload } from "../token/route";
+import jwt from "jsonwebtoken";
 
-export async function GET(req: NextApiRequest) {
-  const userId = req.headers["userId"];
-  const walletAddress = req.headers["walletAddress"];
+export async function GET(req: NextRequest) {
+  const token = req.headers.get("Authorization")?.replace("Bearer ", "");
+  if (!token) {
+    console.log("No token found in req headers");
+    return NextResponse.json(
+      { message: "You are not logged in" },
+      { status: 401 }
+    );
+  }
+
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.NEXT_PUBLIC_SECRET!);
+  } catch (err) {
+    return NextResponse.json({
+      message: "Invalid token",
+      status: 401,
+    });
+  }
+
+  const userId = (<Payload>decoded).userId;
+  const walletAddress = (<Payload>decoded).walletAddress;
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+
   try {
     const userInfo = await prisma.user.findUnique({
       where: {
-        id: userId as unknown as number,
+        id: parseInt(userId as string, 10),
       },
+      include: { tokens: true } // Fetch related tokens
     });
 
-    const pubKeyObj = new PublicKey(walletAddress!);
+    if (!userInfo) {
+      return NextResponse.json({
+        message: "User not found",
+        status: 404,
+      });
+    }
 
+    const pubKeyObj = new PublicKey(walletAddress!);
     const walletBalance = await connection.getBalance(pubKeyObj);
     console.log(`Wallet balance is ${walletBalance}`);
 
@@ -29,6 +57,7 @@ export async function GET(req: NextApiRequest) {
       walletBalance: walletBalance / LAMPORTS_PER_SOL,
     });
   } catch (err) {
+    console.error("Error fetching user data:", err);
     return NextResponse.json({
       message: "Error in getting user data",
       statusCode: 500,

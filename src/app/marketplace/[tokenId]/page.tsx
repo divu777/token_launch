@@ -159,7 +159,7 @@ export default function TokenDetail() {
           </CardFooter>
         </Card>
       </div>
-      <Footer />
+      
     </div>
   );
 }

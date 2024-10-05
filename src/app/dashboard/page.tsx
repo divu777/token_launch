@@ -30,42 +30,37 @@ export default function Component() {
   const [solanaBalance, setSolanaBalance] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        // Simulating API calls
-        await new Promise((resolve) => setTimeout(resolve, 1500))
-        setUserDetails({
-          name: "John Doe",
-          email: "john@example.com",
-          avatar: "/placeholder.svg?height=300&width=300",
-        })
-        setTokens([
-          {
-            id: 1,
-            name: "Solana",
-            symbol: "SOL",
-            amount: 10.5,
-            imageUrl: "/placeholder.svg?height=100&width=100",
-          },
-          {
-            id: 2,
-            name: "Ethereum",
-            symbol: "ETH",
-            amount: 2.3,
-            imageUrl: "/placeholder.svg?height=100&width=100",
-          },
-        ])
-        setSolanaBalance(15.75)
-      } catch (error) {
-        console.error("Error fetching user data:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
+    useEffect(() => {
+      const fetchUserData = async () => {
+      const token = localStorage.getItem('token'); // Retrieve the token from local storage
 
-    fetchUserData()
-  }, [])
+      try {
+        const response = await fetch('/api/user/info', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Send the token in the Authorization header
+            'Content-Type': 'application/json', // Set the content type if needed
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+          const data = await response.json();
+          console.log(data);
+          setUserDetails(data.userInfo);
+          setSolanaBalance(data.walletBalance);
+          setTokens(data.userInfo.tokens); // Set tokens from userInfo
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUserData();
+    }, []);
+
 
   if (loading) {
     return (
@@ -111,7 +106,7 @@ export default function Component() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-2xl font-bold text-gray-900">{tokens.length}</p>
+                      <p className="text-2xl font-bold text-gray-900">{Array.isArray(tokens) ? tokens.length : 0}</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -159,7 +154,7 @@ export default function Component() {
           </CardContent>
         </Card>
       </main>
-      <Footer />
+     
     </div>
   )
 }
