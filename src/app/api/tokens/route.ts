@@ -31,32 +31,3 @@ export async function GET(request) {
 
 
 
-export async function POST(request) {
-  try {
-    const data = await request.json();
-    // Implement your token creation logic here
-    // const newToken = await prisma.token.create({ data });
-
-    return new Response(
-      JSON.stringify({
-        message: "Token created successfully",
-        // newToken,
-        statusCode: 201,
-      }),
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  } catch (err) {
-    console.error(err);
-    return new Response(
-      JSON.stringify({
-        message: "Error in posting token",
-        statusCode: 500,
-      }),
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  }
-}

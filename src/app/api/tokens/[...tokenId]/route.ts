@@ -1,23 +1,50 @@
 import prisma from "@/db/db";
+import { NextRequest } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { tokenId: string } }
+) {
   try {
-    const { id } = params;
+    const tokenId = parseInt(params.tokenId);
+    
+    if (isNaN(tokenId)) {
+      return Response.json({
+        message: "Invalid token ID",
+        statusCode: 400,
+      });
+    }
 
-    const tokenInfo = await prisma.token.findUnique({
+    const token = await prisma.token.findUnique({
       where: {
-        id: parseInt(id),
+        id: tokenId,
+      },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            wallet: true,
+          },
+        },
       },
     });
 
+    if (!token) {
+      return Response.json({
+        message: "Token not found",
+        statusCode: 404,
+      });
+    }
+
     return Response.json({
-      token: tokenInfo,
+      token,
       statusCode: 200,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return Response.json({
-      message: "error in getting the details of the token ",
+      message: "Error in getting the details of the token",
       statusCode: 500,
     });
   }

@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import CardImg from "../../../public/outer image.jpg";
+import CardImg from "../../../public/hero.jpg";
 
 const ExpandingGatesImage = () => {
   return (
-    <div style={{ position: "relative", height: "24rem", overflow: "hidden" }}>
+    <div style={{ position: "relative", height: "26rem", overflow: "hidden" }}>
       <motion.div
         initial={{ scaleX: 1 }}
         animate={{ scaleX: 0 }} // Scale down to reveal

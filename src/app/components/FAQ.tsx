@@ -32,7 +32,7 @@ const faqData: FAQItem[] = [
   },
 ];
 
-const FAQ = () => {
+export default function FAQ() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const toggleQuestion = (index: number) => {
@@ -40,59 +40,63 @@ const FAQ = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-4xl font-bold mb-12 text-gray-900">
-        Frequently Asked Questions
-      </h1>
-      <div className="w-full max-w-3xl space-y-4">
-        {faqData.map((item, index) => (
-          <div
-            key={index}
-            className="bg-white shadow-md rounded-lg overflow-hidden"
-          >
-            <button
-              className="w-full text-left p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-between items-center"
-              onClick={() => toggleQuestion(index)}
-              aria-expanded={activeIndex === index}
-              aria-controls={`faq-answer-${index}`}
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-gray-50 to-gray-100 py-16 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-4xl">
+        <h1 className="text-5xl font-bold mb-12 text-gray-900 text-center">
+          Frequently Asked Questions
+        </h1>
+        <div className="space-y-6">
+          {faqData.map((item, index) => (
+            <div
+              key={index}
+              className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200"
             >
-              <span className="text-lg font-medium text-gray-900">
-                {item.question}
-              </span>
-              <motion.span
-                animate={{ rotate: activeIndex === index ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
+              <button
+                className="w-full text-left p-6 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-between items-center hover:bg-gray-50 transition-colors duration-200"
+                onClick={() => toggleQuestion(index)}
+                aria-expanded={activeIndex === index}
+                aria-controls={`faq-answer-${index}`}
               >
-                <ChevronDown className="h-5 w-5 text-gray-500" />
-              </motion.span>
-            </button>
-            <AnimatePresence initial={false}>
-              {activeIndex === index && (
-                <motion.div
-                  key={`answer-${index}`}
-                  initial="collapsed"
-                  animate="open"
-                  exit="collapsed"
-                  variants={{
-                    open: { opacity: 1, height: "auto" },
-                    collapsed: { opacity: 0, height: 0 },
-                  }}
-                  transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                <span className="text-xl font-semibold text-gray-900 pr-8">
+                  {item.question}
+                </span>
+                <motion.span
+                  animate={{ rotate: activeIndex === index ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex-shrink-0"
                 >
-                  <div
-                    className="p-4 text-gray-700 bg-gray-50"
-                    id={`faq-answer-${index}`}
+                  <ChevronDown className="h-6 w-6 text-blue-500" />
+                </motion.span>
+              </button>
+              <AnimatePresence initial={false}>
+                {activeIndex === index && (
+                  <motion.div
+                    key={`answer-${index}`}
+                    initial="collapsed"
+                    animate="open"
+                    exit="collapsed"
+                    variants={{
+                      open: { opacity: 1, height: "auto" },
+                      collapsed: { opacity: 0, height: 0 },
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: [0.04, 0.62, 0.23, 0.98],
+                    }}
                   >
-                    {item.answer}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
+                    <div
+                      className="p-6 text-gray-700 bg-gray-50 border-t border-gray-200 text-lg leading-relaxed"
+                      id={`faq-answer-${index}`}
+                    >
+                      {item.answer}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
-};
-
-export default FAQ;
+}
