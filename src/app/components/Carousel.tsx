@@ -86,10 +86,8 @@ export function CarouselDemo() {
                 <Image
                   src={item.image}
                   alt={item.title}
-                  width={300} // Set the desired width
-                  height={400}
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  style={{objectFit:"cover"}}
                   className="transition-transform duration-300 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
