@@ -45,6 +45,7 @@ export default function NFTCollection() {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalNfts, setTotalNfts] = useState(0);
 
   const fetchNfts = async (page: number) => {
     try {
@@ -57,6 +58,7 @@ export default function NFTCollection() {
       if (response.ok) {
         setNfts(data.tokens || []);
         setTotalPages(Math.max(1, data.totalPages || 1));
+        setTotalNfts(data.totalTokens || 0); // Add this line to store total NFTs
       } else {
         setError(data.message || "Failed to fetch Tokens");
       }
@@ -72,22 +74,16 @@ export default function NFTCollection() {
     fetchNfts(currentPage);
   }, [currentPage]);
 
-  const filteredNfts = nfts.filter((nft) =>
-    nft.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const sortedNfts = [...filteredNfts].sort((a, b) => {
-    if (sortOrder === "asc") {
-      return a.name.localeCompare(b.name);
-    } else {
-      return b.name.localeCompare(a.name);
-    }
-  });
-
-  const currentNfts = sortedNfts.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  // Filter and sort on the displayed NFTs only
+  const filteredAndSortedNfts = [...nfts]
+    .filter((nft) => nft.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
 
   const paginate = (pageNumber: number) => {
     if (pageNumber < 1 || pageNumber > totalPages) return;
@@ -120,7 +116,7 @@ export default function NFTCollection() {
               Discover unique SPL tokens
             </h1>
             <p className="text-lg mb-8 text-gray-600">
-              Explore {nfts.length} available items
+              Explore {totalNfts} available items
             </p>
             <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Input
@@ -153,20 +149,20 @@ export default function NFTCollection() {
           </div>
         </div>
 
-        {sortedNfts.length === 0 ? (
+        {filteredAndSortedNfts.length === 0 ? (
           <div className="text-center py-10">
             <p className="text-lg text-gray-600">No Tokens found</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {currentNfts.map((nft) => (
+            {filteredAndSortedNfts.map((nft) => (
               <Link key={nft.id} href={`/marketplace/${nft.id}`}>
                 <div className="relative group overflow-hidden rounded-lg aspect-[3/4]">
                   <Image
                     src={nft.imageUrl}
                     alt={nft.name}
-                    width={300} // Specify the desired width
-                    height={400} // Specify the desired height
+                    width={300}
+                    height={400}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-6">
