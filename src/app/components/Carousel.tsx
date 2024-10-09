@@ -1,12 +1,10 @@
 "use client";
 
-import Image from "next/image";
+import img from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
+impol,
+  CCarouselItem,
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";

@@ -8,7 +8,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**.pinata.cloud',
+        hostname: 'red-advisory-catfish-400.mypinata.cloud',
+        pathname: '/ipfs/**',
       },
     ],
   },
