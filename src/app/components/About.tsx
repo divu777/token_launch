@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import React, { useRef } from "react";
 import Image from "next/image";
 import CardImg2 from "../../../public/hero2.jpg";
+import { Button } from "@/components/ui/button";
 
 export default function About() {
   const ref = useRef(null);
@@ -19,7 +20,7 @@ export default function About() {
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: i * 0.1 + 2.5 }, // Increased delay
+      transition: { delay: i * 0.1 + 2.5 },
     }),
   };
 
@@ -36,9 +37,7 @@ export default function About() {
               style={{ height: "100%" }}
             />
             <Image
-              src={
-                "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmZrrNy1Mma5e3EL9nckc9y7rneyPkvZfjvdaXir1xZrb2"
-              }
+              src="https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmZrrNy1Mma5e3EL9nckc9y7rneyPkvZfjvdaXir1xZrb2"
               alt="Card Image"
               layout="fill"
               objectFit="cover"
@@ -92,6 +91,9 @@ export default function About() {
             you've got the inside scoop, hit me up on Twitter! Let's learn
             together! 🐦✨
           </motion.p>
+          <Button className="mt-4" onClick={() => console.log("Learn More!")}>
+            Learn More
+          </Button>
         </div>
       </div>
       <div className="flex justify-center w-full items-end text-5xl pb-24 mt-24">
