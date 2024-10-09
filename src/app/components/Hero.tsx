@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
-    <div className="flex h-screen justify-evenly items-center relative bg-gray-50 mt-12">
+    <div className="flex h-screen justify-evenly items-center relative  mt-12">
       <div className="flex flex-col justify-center items-center  w-full">
         <motion.h1
           initial={{ x: "-100%" }}
@@ -25,7 +25,9 @@ const Hero = () => {
         initial={{ y: -250 }}
         animate={{ y: 0 }}
         transition={{ duration: 1 }}
-        src={CardImg2.src}
+        src={
+          "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmTR1BsgHYUsSd7u75GsQPkkqwQ2bQrnXJHQn57t9h3Wxu"
+        }
         alt=""
         className="h-40 absolute top-5 right-40 z-0"
       />

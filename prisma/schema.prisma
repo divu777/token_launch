@@ -12,6 +12,7 @@ generator client {
 model User {
   id        Int      @id @default(autoincrement())
   name      String?
+  profilePic String @default("https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmdkkjGCuy8V9CWgdwzX7yyq3QEC5n8iNPMckjbx6U5d43")
   wallet    String   @unique 
   tokens    Token[]  @relation("UserTokens")
   createdAt DateTime @default(now())

@@ -36,7 +36,9 @@ export default function About() {
               style={{ height: "100%" }}
             />
             <Image
-              src={CardImg2}
+              src={
+                "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmZrrNy1Mma5e3EL9nckc9y7rneyPkvZfjvdaXir1xZrb2"
+              }
               alt="Card Image"
               layout="fill"
               objectFit="cover"
@@ -52,36 +54,59 @@ export default function About() {
             animate={isInView ? "visible" : "hidden"}
             transition={{ duration: 0.5, delay: 1.5 }}
           >
-            SIMPLE AND TIMELESS
+            Dive into the Solana Minting Adventure! 🚀
           </motion.h2>
           <motion.p
-            className="text-lg leading-relaxed text-gray-700"
+            className="text-md leading-relaxed text-gray-700 w-2/3"
             variants={textVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             transition={{ duration: 0.5, delay: 1.7 }}
           >
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae quis
-            accusamus dignissimos voluptatem commodi odit molestiae dolore
-            ratione dolor molestias laborum quam beatae mollitia perferendis,
-            odio itaque aperiam explicabo? A.
+            Welcome to the wild world of Solana! Ready to unleash your inner
+            “Modi Ji” and mint some digital treasures? Here’s how it works:
+            <br />
+            <br />
+            First, you'll create a Mint Account after interacting with a Solana
+            contract—think of it as your magic ticket to print more tokens! But
+            here’s the twist: instead of landing straight in your wallet, your
+            tokens head to an Associated Token Account (ATA) that holds your
+            shiny new assets.
+            <br />
+            <br />
+            Next, you’ll want to jazz things up with metadata! Using cool
+            services like IFSC and Pinata, you can upload and pin your metadata
+            to keep it safe and sound in the vast digital cosmos. It’s a little
+            behind-the-scenes magic that ensures your creations stand the test
+            of time.
+            <br />
+            <br />
+            Oh, and don’t forget: if you’re experimenting in Devnet, you’ll need
+            those precious Devnet tokens from the Solana faucet. They’re just
+            waiting for you to snag ‘em and start your minting journey!
+            <br />
+            <br />
+            Pro Tip: Avoid using popular NFT images like the Chimpunks. While
+            they may work, you might run into some restrictions on creation. If
+            you’ve got the inside scoop, hit me up on Twitter! Let’s learn
+            together! 🐦✨
           </motion.p>
         </div>
       </div>
       <div className="flex justify-center w-full items-end text-5xl pb-24 mt-24">
-        <h1 className="w-4/5 font-semibold leading-tight">
+        <h1 className="w-4/5 font-bold leading-tight">
           {[
-            "DISCOVER",
-            "EVERYDAY",
-            "ESSENTIALS",
-            "DESIGNED",
-            "FOR",
-            "A",
-            "BLEND",
-            "OF",
-            "COMFORT",
+            "UNLEASH",
+            "YOUR",
+            "CREATIVITY",
+            "EMBRACE",
+            "THE",
+            "FUTURE",
             "AND",
-            "ELEGANCE.",
+            "MINT",
+            "YOUR",
+            "DIGITAL",
+            "LEGACY.",
           ].map((word, i) => (
             <motion.span
               key={i}

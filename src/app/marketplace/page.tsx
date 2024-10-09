@@ -1,4 +1,6 @@
 "use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,10 +18,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState, useEffect } from "react";
-import AppBar from "../components/AppBar";
+import { Button } from "@/components/ui/button";
+import MarketplaceSkeleton from "../components/MarketplaceSkeleton";
 import Footer from "../components/Footer";
-
+import AppBar from "../components/AppBar";
 
 interface NFT {
   id: number;
@@ -43,7 +45,7 @@ export default function NFTCollection() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-   const fetchNfts = async (page: number) => {
+  const fetchNfts = async (page: number) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -53,13 +55,13 @@ export default function NFTCollection() {
       const data = await response.json();
       if (response.ok) {
         setNfts(data.tokens || []);
-        setTotalPages(data.totalPages || 1);
+        setTotalPages(Math.max(1, data.totalPages || 1));
       } else {
-        setError(data.message || 'Failed to fetch NFTs');
+        setError(data.message || "Failed to fetch Tokens");
       }
     } catch (error) {
-      setError('Error fetching NFTs');
-      console.error("Error fetching NFTs:", error);
+      setError("Error fetching Tokens");
+      console.error("Error fetching Tokens:", error);
     } finally {
       setIsLoading(false);
     }
@@ -92,15 +94,7 @@ export default function NFTCollection() {
   };
 
   if (isLoading) {
-    return (
-      <div className="overflow-x-hidden">
-        <AppBar />
-        <div className="w-screen flex justify-center items-center h-screen">
-          <p>Loading NFTs...</p>
-        </div>
-        <Footer />
-      </div>
-    );
+    return <MarketplaceSkeleton />;
   }
 
   if (error) {
@@ -118,84 +112,127 @@ export default function NFTCollection() {
   return (
     <div className="overflow-x-hidden">
       <AppBar />
-      <div className="w-screen flex flex-col justify-between px-20 py-5">
-        <div className="flex justify-between items-end mb-4">
-          <div className="flex flex-col w-2/3 gap-10">
-            <div className="flex justify-start gap-10 items-end">
-              <h1 className="text-6xl font-bold uppercase">Explore</h1>
-              <h3>{nfts.length} items available</h3>
+      <div className="container mx-auto px-4 py-12 mt-20">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-16">
+          <div className="max-w-2xl w-full md:w-auto mb-8 md:mb-0">
+            <h1 className="text-5xl font-bold mb-6 leading-tight">
+              Discover unique SPL tokens
+            </h1>
+            <p className="text-lg mb-8 text-gray-600">
+              Explore {nfts.length} available items
+            </p>
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <Input
+                type="text"
+                placeholder="Search Tokens..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="flex-grow text-base h-12 rounded-full"
+              />
+              <Select
+                onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
+              >
+                <SelectTrigger className="w-full sm:w-[180px] h-12 rounded-full">
+                  <SelectValue placeholder="Sort order" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="asc">A-Z</SelectItem>
+                  <SelectItem value="desc">Z-A</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <Input
-              type="text"
-              placeholder="Search NFTs..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-2/3 h-20 text-lg px-10 rounded-full"
-            />
           </div>
-          <Select
-            onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
-          >
-            <SelectTrigger className="w-[180px] h-20 text-lg px-10 rounded-full">
-              <SelectValue placeholder="Sort order" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="asc">A-Z</SelectItem>
-              <SelectItem value="desc">Z-A</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="text-right w-full md:w-auto">
+            <p className="text-base mb-3 text-gray-600">
+              Get 15% discount on your first Mainnet Token
+            </p>
+            <Button size="lg" className="rounded-full px-8 h-12">
+              Under Dev
+            </Button>
+          </div>
         </div>
 
         {sortedNfts.length === 0 ? (
           <div className="text-center py-10">
-            <p>No NFTs found</p>
+            <p className="text-lg text-gray-600">No Tokens found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 py-10">
-            {sortedNfts.map((nft) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {currentNfts.map((nft) => (
               <Link key={nft.id} href={`/marketplace/${nft.id}`}>
-                <div className="border p-4 rounded">
+                <div className="relative group overflow-hidden rounded-lg aspect-[3/4]">
                   <img
                     src={nft.imageUrl}
                     alt={nft.name}
-                    className="w-full h-72 object-cover"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <h3 className="mt-2 font-bold">{nft.name}</h3>
-                  <p>{nft.amount } {nft.symbol}</p>
+                  <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-6">
+                    <div className="w-full flex justify-between items-center">
+                      <div className="text-white">
+                        <h3 className="text-xl font-semibold mb-1">
+                          {nft.name}
+                        </h3>
+                        <p className="text-sm">
+                          {nft.amount} {nft.symbol}
+                        </p>
+                      </div>
+                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 12H19M19 12L12 5M19 12L12 19"
+                            stroke="black"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </Link>
             ))}
           </div>
         )}
 
-        {totalPages > 1 && (
-          <Pagination className="mt-4">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                />
+        <Pagination className="mt-12">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => paginate(currentPage - 1)}
+                className={
+                  currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                }
+              />
+            </PaginationItem>
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  onClick={() => paginate(index + 1)}
+                  isActive={currentPage === index + 1}
+                >
+                  {index + 1}
+                </PaginationLink>
               </PaginationItem>
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <PaginationItem key={index}>
-                  <PaginationLink 
-                    onClick={() => paginate(index + 1)}
-                    isActive={currentPage === index + 1}
-                  >
-                    {index + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )}
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => paginate(currentPage + 1)}
+                className={
+                  currentPage === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : ""
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
       <Footer />
     </div>

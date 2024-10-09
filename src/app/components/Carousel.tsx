@@ -12,15 +12,60 @@ import {
 } from "@/components/ui/carousel";
 
 const carouselItems = [
-  { id: 1, title: "Elegant Simplicity", image: "/card1.jpg" },
-  { id: 2, title: "Modern Comfort", image: "/card2.jpg" },
-  { id: 3, title: "Timeless Design", image: "/card3.jpg" },
-  { id: 4, title: "Luxurious Details", image: "/card4.jpg" },
-  { id: 5, title: "Minimalist Beauty", image: "/card5.jpg" },
-  { id: 6, title: "Classic Charm", image: "/card6.jpg" },
-  { id: 7, title: "Contemporary Edge", image: "/card7.jpg" },
-  { id: 8, title: "Sophisticated Style", image: "/card8.jpg" },
-  { id: 9, title: "Refined Elegance", image: "/card9.jpg" },
+  {
+    id: 1,
+    title: "Elegant Simplicity",
+    image:
+      "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmeBL55bYYW7ogGP5u1qYtyDXH4B2RNCP4S8gpwcMSHKEU",
+  },
+  {
+    id: 2,
+    title: "Modern Comfort",
+    image:
+      "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmafHY35q2Ursf8dtN2kas1rm3LNZNTngRGBnbo5xuwLL7",
+  },
+  {
+    id: 3,
+    title: "Timeless Design",
+    image:
+      "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmPHB7RS57nxyBsf9YDWuQ3NndmTuxxfUbhGZUmfg137ta",
+  },
+  {
+    id: 4,
+    title: "Luxurious Details",
+    image:
+      "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmRFXXiXZ1o9Tz9mpBW46aoQTdxMjwT7nSPiXK1FwFUZNh",
+  },
+  {
+    id: 5,
+    title: "Minimalist Beauty",
+    image:
+      "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmbhwYg4BBcRR84bcrHXxPVdjGqZHtdrpaYJaiNELQTtCD",
+  },
+  {
+    id: 6,
+    title: "Classic Charm",
+    image:
+      "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmQisRbKyiCD8vvxW8tRmDM5NRkvu87oKkA6wnGCy2gwWy",
+  },
+  {
+    id: 7,
+    title: "Contemporary Edge",
+    image:
+      "https://red-advisory-catfish-400.mypinata.cloud/ipfs/Qmd1FJieiugSnMrR6PNyDvck8zq6RVjhvPuwC8mgCYCf6h",
+  },
+  {
+    id: 8,
+    title: "Sophisticated Style",
+    image:
+      "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmZ2wK3j8vFHRU4WQFVHWmqKfrpf3LTqUoRq54JcSKERFy",
+  },
+  {
+    id: 9,
+    title: "Refined Elegance",
+    image:
+      "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmYUfHsEUqMKEtgbKqPYGZWRvTTqkXFWsoNhVWxv48bZNJ",
+  },
 ];
 
 export function CarouselDemo() {

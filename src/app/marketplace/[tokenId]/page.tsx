@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, User } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import AppBar from "../../components/AppBar";
-import Footer from "@/app/components/Footer";
+import Footer from "../../components/Footer";
 
 interface Token {
   id: number;
@@ -25,6 +26,7 @@ interface Token {
     id: number;
     name: string | null;
     wallet: string;
+    profilePic:string;
   };
   provenance?: string;
   year?: number;
@@ -68,7 +70,7 @@ export default function TokenDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-white">
         <AppBar />
         <div className="container mx-auto px-4 py-8 flex justify-center items-center h-[calc(100vh-64px)]">
           <p className="text-lg">Loading token details...</p>
@@ -79,7 +81,7 @@ export default function TokenDetail() {
 
   if (error || !token) {
     return (
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-white">
         <AppBar />
         <div className="container mx-auto px-4 py-8">
           <Link
@@ -103,10 +105,10 @@ export default function TokenDetail() {
 
   const formattedAmount = (token.amount / Math.pow(10, token.decimals)).toFixed(
     token.decimals
-  );
+  );const creationYear = new Date(token.createdAt).getFullYear()
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-white">
       <AppBar />
       <div className="container mx-auto px-4 py-8">
         <Link
@@ -116,62 +118,59 @@ export default function TokenDetail() {
           <ArrowLeft className="mr-2" />
           Back to Marketplace
         </Link>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="relative aspect-square bg-black rounded-lg overflow-hidden">
+        <div className="grid md:grid-cols-5 gap-8">
+          <div className="md:col-span-3 relative aspect-square bg-black overflow-hidden">
             <Image
               src={token.imageUrl}
               alt={token.name}
               fill
               className="object-cover"
             />
-            <div className="absolute top-0 left-0 w-full p-4 bg-gradient-to-b from-black to-transparent text-white">
-              <h1 className="text-2xl font-bold">MUSIC TRANSCENDS</h1>
-              <p className="text-sm">
-                Creator: {token.creator?.name || "Anonymous"}
-              </p>
-            </div>
-            <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
-              <p className="text-sm">Release Year: {token.year || "N/A"}</p>
-              <p className="text-sm">Blockchain: Solana</p>
-            </div>
           </div>
-          <div className="space-y-6">
+          <div className="md:col-span-2 space-y-6">
             <div>
-              <h2 className="text-3xl font-bold">{token.name}</h2>
-              <p className="text-gray-600">
-                by {token.creator?.name || "Anonymous"}
-              </p>
+              <h1 className="text-5xl font-black uppercase mb-2 ">
+                {token.name}
+              </h1>
+              <div className="flex items-center space-x-2">
+                <Image
+                  src={token.creator.profilePic || "/placeholder.svg"}
+                  alt={token.creator?.name || "Anonymous"}
+                  width={24}
+                  height={24}
+                  className="rounded-full"
+                />
+                <p className="text-gray-600 font-medium">
+                  {token.creator?.name || "Anonymous"}
+                </p>
+              </div>
             </div>
-            <div className="bg-orange-500 text-white p-6 rounded-lg">
-              <p className="text-5xl font-bold">${formattedAmount}</p>
-              <Button className="w-full mt-4 bg-white text-orange-500 hover:bg-gray-100">
-                BUY NOW
+           
+            <div className="flex items-center justify-between h-20 border-y border-gray-200 border-solid">
+              <p className="text-4xl font-bold w-1/2">${formattedAmount}</p>
+              <Button className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-6 py-2 h-full w-1/2">
+                SOL
               </Button>
             </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Description</h3>
-              <p>{token.description}</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Provenance</h3>
-              <p>
-                {token.provenance || "No provenance information available."}
-              </p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Details</h3>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Token ID: {token.id}</li>
-                <li>Symbol: {token.symbol}</li>
-                <li>Total Supply: {token.amount}</li>
-                <li>Decimals: {token.decimals}</li>
-                <li>
-                  Created: {new Date(token.createdAt).toLocaleDateString()}
-                </li>
-                <li>
-                  Last Updated: {new Date(token.updatedAt).toLocaleDateString()}
-                </li>
+            
+           <div>
+              <h2 className="text-2xl font-bold uppercase mb-4">DETAILS</h2>
+              <ul className="space-y-2 text-gray-700">
+                <li><strong>Description:</strong> {token.description}</li>
+                <li><strong>Provenance:</strong> {token.provenance || "No provenance information available."}</li>
+                <li><strong>Token ID:</strong> {token.id}</li>
+                <li><strong>Symbol:</strong> {token.symbol}</li>
+                <li><strong>Total Supply:</strong> {token.amount}</li>
+                <li><strong>Decimals:</strong> {token.decimals}</li>
+                <li><strong>Blockchain:</strong> Solana</li>
+                <li><strong>Created:</strong> {new Date(token.createdAt).toLocaleDateString()}</li>
+                <li><strong>Last Updated:</strong> {new Date(token.updatedAt).toLocaleDateString()}</li>
               </ul>
+            </div>
+            <Separator className="bg-gray-200" />
+            <div>
+              <h2 className="text-2xl font-bold uppercase mb-4">YEAR</h2>
+              <p className="text-gray-700">{creationYear}</p>
             </div>
           </div>
         </div>

@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error("Error in adding token to DB:", err);
     return NextResponse.json({
-      message: err.message || "Error in adding token to DB",
+      message: "Error in adding token to DB",
       statusCode: 500,
     });
   }

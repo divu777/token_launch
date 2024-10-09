@@ -35,7 +35,9 @@ const ExpandingGatesImage = () => {
         }}
       />
       <motion.img
-        src={CardImg.src}
+        src={
+          "https://red-advisory-catfish-400.mypinata.cloud/ipfs/QmZr7geoHbzdCvWQGLKHm3XTomj9FLG2MVswofFnDb3JHg"
+        }
         style={{
           height: "100%",
           width: "auto",

@@ -6,14 +6,17 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Wallet, Coins, User, Menu } from "lucide-react"
+import { Wallet, Coins, ArrowUpRight, ArrowDownRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import AppBar from "../components/AppBar"
 import Footer from "../components/Footer"
+import NameUpdatePopup from "../components/NameUpdateProp"
+
 interface UserDetails {
-  name: string
-  email: string
-  avatar: string
+  name: string;
+  email: string;
+  avatar: string;
+  profilePic: string;
 }
 
 interface Token {
@@ -22,45 +25,50 @@ interface Token {
   symbol: string
   amount: number
   imageUrl: string
+  change?: number // Make change optional
 }
 
 export default function Component() {
+  const [isNameUpdateOpen, setIsNameUpdateOpen] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null)
   const [tokens, setTokens] = useState<Token[]>([])
   const [solanaBalance, setSolanaBalance] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-      const fetchUserData = async () => {
-      const token = localStorage.getItem('token'); // Retrieve the token from local storage
+
+  const handleUpdateName = (newName:String) => {
+    setUserDetails(prev => prev ? { ...prev, name: newName } : null);
+  };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token')
 
       try {
         const response = await fetch('/api/user/info', {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`, // Send the token in the Authorization header
-            'Content-Type': 'application/json', // Set the content type if needed
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-        });
+        })
 
         if (!response.ok) {
-          throw new Error('Failed to fetch user data');
+          throw new Error('Failed to fetch user data')
         }
-          const data = await response.json();
-          console.log(data);
-          setUserDetails(data.userInfo);
-          setSolanaBalance(data.walletBalance);
-          setTokens(data.userInfo.tokens); // Set tokens from userInfo
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
+        const data = await response.json()
+        console.log(data.userInfo)
+        setUserDetails(data.userInfo)
+        setSolanaBalance(data.walletBalance)
+        setTokens(data.userInfo.tokens)
+      } catch (error) {
+        console.error("Error fetching user data:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-      fetchUserData();
-    }, []);
-
+    fetchUserData()
+  }, [])
 
   if (loading) {
     return (
@@ -71,42 +79,62 @@ export default function Component() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-    <AppBar />
-      <main className="p-6 space-y-6">
-        <Card className="bg-white border-gray-200 shadow-md">
+    <div className="min-h-screen bg-gray-50   flex items-center justify-center">
+      <AppBar />
+      <main className="container mx-auto p-6 space-y-6  h-full ">
+        <Card className="bg-white border-gray-200 shadow-md overflow-hidden">
           <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row gap-6">
-              <div className="flex-shrink-0">
-                <Avatar className="h-32 w-32">
-                  <AvatarImage src={userDetails?.avatar} alt={userDetails?.name} />
-                  <AvatarFallback>{userDetails?.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-              </div>
-              <div className="flex-grow space-y-4">
+            <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
+              <Avatar className="h-24 w-24 md:h-32 md:w-32">
+                 <Image
+      src={userDetails!.profilePic}
+      alt={userDetails?.name || 'User'}
+      fill
+      sizes="(max-width: 768px) 96px, 128px"
+      className="object-cover"
+    />
+                {/* <AvatarFallback>
+                  {userDetails?.name?.charAt(0) ?? "U"}
+                </AvatarFallback> */}
+              </Avatar>
+
+              <div className="flex-grow space-y-4 text-center md:text-left">
                 <div>
-                  <h2 className="text-2xl font-semibold text-gray-800">{userDetails?.name}</h2>
-                  <p className="text-gray-600">{userDetails?.email}</p>
+                  <div className="flex items-center">
+                    <h2 className="text-3xl font-bold text-gray-800">
+                      {userDetails?.name}
+                    </h2>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsNameUpdateOpen(true)}
+                      className="ml-2"
+                    >
+                      Edit
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex gap-4">
-                  <Card className="bg-gray-50 border-gray-200 flex-1 shadow-sm">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Card className="bg-primary text-primary-foreground flex-1 shadow-sm">
                     <CardHeader>
-                      <CardTitle className="flex items-center text-sm text-gray-700">
+                      <CardTitle className="flex items-center text-sm">
                         <Wallet className="mr-2 h-4 w-4" /> SOL Balance
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-2xl font-bold text-gray-900">{solanaBalance ?? 0} SOL</p>
+                      <p className="text-3xl font-bold">
+                        {solanaBalance?.toFixed(2) ?? 0} SOL
+                      </p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-gray-50 border-gray-200 flex-1 shadow-sm">
+                  <Card className="bg-secondary text-secondary-foreground flex-1 shadow-sm">
                     <CardHeader>
-                      <CardTitle className="flex items-center text-sm text-gray-700">
+                      <CardTitle className="flex items-center text-sm">
                         <Coins className="mr-2 h-4 w-4" /> Unique Tokens
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-2xl font-bold text-gray-900">{Array.isArray(tokens) ? tokens.length : 0}</p>
+                      <p className="text-3xl font-bold">{tokens.length}</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -117,33 +145,60 @@ export default function Component() {
 
         <Card className="bg-white border-gray-200 shadow-md">
           <CardHeader>
-            <CardTitle className="text-gray-800">Your Tokens</CardTitle>
+            <CardTitle className="text-2xl font-bold text-gray-800">
+              Your Tokens
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {tokens.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tokens.map((token) => (
-                  <Card key={token.id} className="bg-gray-50 border-gray-200 shadow-sm">
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-4">
-                        <div className="relative w-12 h-12">
-                          <Image
-                            src={token.imageUrl}
-                            alt={token.name}
-                            width={48}
-                            height={48}
-                            className="rounded-full"
-                          />
+                  <motion.div
+                    key={token.id}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <Card className="bg-white border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+                      <CardContent className="p-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="flex-shrink-0 relative w-12 h-12">
+                            <Image
+                              src={token.imageUrl}
+                              alt={token.name}
+                              fill
+                              className="rounded-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-grow min-w-0">
+                            <p className="font-semibold text-gray-800">
+                              {token.name}
+                            </p>
+                            <p className="text-sm text-gray-600 truncate">
+                              {token.amount.toFixed(2)} {token.symbol}
+                            </p>
+                          </div>
+                          {token.change !== undefined && (
+                            <div
+                              className={`flex items-center flex-shrink-0 ${
+                                token.change >= 0
+                                  ? "text-green-500"
+                                  : "text-red-500"
+                              }`}
+                            >
+                              {token.change >= 0 ? (
+                                <ArrowUpRight className="h-4 w-4 mr-1" />
+                              ) : (
+                                <ArrowDownRight className="h-4 w-4 mr-1" />
+                              )}
+                              <span className="text-sm font-medium">
+                                {token.change.toFixed(2)}%
+                              </span>
+                            </div>
+                          )}
                         </div>
-                        <div>
-                          <p className="font-semibold text-gray-800">{token.name}</p>
-                          <p className="text-sm text-gray-600">
-                            {token.amount} {token.symbol}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 ))}
               </div>
             ) : (
@@ -154,7 +209,14 @@ export default function Component() {
           </CardContent>
         </Card>
       </main>
-     
+      {userDetails && (
+        <NameUpdatePopup
+          isOpen={isNameUpdateOpen}
+          onClose={() => setIsNameUpdateOpen(false)}
+          currentName={userDetails.name}
+          onUpdateName={handleUpdateName}
+        />
+      )}
     </div>
-  )
+  );
 }

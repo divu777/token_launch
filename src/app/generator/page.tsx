@@ -1,22 +1,24 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-import { X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import AppBar from "../components/AppBar";
-import axios from "axios";
-import { dataType } from "../actions/addToken";
-import {
-  createMintAccount,
-  createATAAccount,
-  mintTokens,
-  uploadToIPFS,
-  uploadMetadata,
-  createMetadata,
-} from "../utils/solanaUtils";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react"
+import axios from "axios"
+import { X } from "lucide-react"
+import { useState } from "react"
+import { dataType } from "../actions/addToken"
+import AppBar from "../components/AppBar"
+import { createMintAccount, createATAAccount, mintTokens, uploadToIPFS, uploadMetadata, createMetadata } from "../utils/solanaUtils"
+import { motion, AnimatePresence } from "framer-motion"
 
-const FormField = ({
+interface FormFieldProps {
+  label: string;
+  type: string;
+  placeholder: string;
+  value: string | number | null;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name: string;
+  className?: string;
+}
+const FormField: React.FC<FormFieldProps> = ({
   label,
   type,
   placeholder,
@@ -26,20 +28,22 @@ const FormField = ({
   className = "",
 }) => (
   <div className="flex items-baseline gap-8">
-    <h2 className="text-5xl font-bold whitespace-nowrap">{label}</h2>
+    <h2 className="text-4xl font-bold whitespace-nowrap text-gray-800">
+      {label}
+    </h2>
     <input
       type={type}
       placeholder={placeholder}
-      value={value}
+      value={value ?? ""}
       onChange={onChange}
       name={name}
-      className={`bg-transparent border-b border-gray-700 focus:border-white outline-none py-2 text-xl text-gray-400 ${className}`}
+      className={`bg-transparent border-b border-gray-300 focus:border-gray-600 outline-none py-2 text-xl text-gray-600 ${className}`}
       required
     />
   </div>
 );
 
-const TokenForm = () => {
+export default function TokenForm() {
   const { connection } = useConnection();
   const { publicKey, signTransaction } = useWallet();
   const [imagePreview, setImagePreview] = useState(null);
@@ -53,7 +57,7 @@ const TokenForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [tokenCreated, setTokenCreated] = useState(false);
 
   const steps = [
@@ -65,7 +69,9 @@ const TokenForm = () => {
     "Finalizing",
   ];
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: {
+    target: { name: any; value: any; type: any };
+  }) => {
     const { name, value, type } = e.target;
     setFormData((prevData) => {
       let newValue = value;
@@ -80,19 +86,20 @@ const TokenForm = () => {
       return { ...prevData, [name]: newValue };
     });
   };
-
+  // @ts-ignore
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
+        //@ts-ignore
         setImagePreview(reader.result);
         setFormData((prevData) => ({ ...prevData, image: file }));
       };
       reader.readAsDataURL(file);
     }
   };
-
+  // @ts-ignore
   const removeImage = (e) => {
     e.stopPropagation();
     setImagePreview(null);
@@ -109,7 +116,7 @@ const TokenForm = () => {
       formData.image
     );
   };
-
+  // @ts-ignore
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!publicKey || !signTransaction || !isFormValid()) return;
@@ -118,8 +125,6 @@ const TokenForm = () => {
     setCurrentStep(0);
 
     try {
-      
-
       // Step 0: Create Mint Account
       setCurrentStep(0);
       const mintAd = await createMintAccount(
@@ -147,7 +152,7 @@ const TokenForm = () => {
 
       // Step 3: Upload Image
       setCurrentStep(3);
-      const imageUrl = await uploadToIPFS(formData.image);
+      const imageUrl = await uploadToIPFS(formData.image!);
       await new Promise((r) => setTimeout(r, 2000));
 
       // Step 4: Create Metadata
@@ -171,7 +176,7 @@ const TokenForm = () => {
 
       // Step 5: Finalize
       setCurrentStep(5);
-      const data:dataType = {
+      const data: dataType = {
         name: formData.name,
         symbol: formData.symbol,
         decimals: formData.decimals,
@@ -212,17 +217,18 @@ const TokenForm = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen">
+    <div className=" max-h-screen">
       <AppBar />
-      <div className="bg-black text-white p-8 relative overflow-hidden">
+      <div className="bg-white text-gray-800 p-8 relative overflow-hidden mt-20">
         <label className="absolute top-16 right-16 w-48 h-48 transform rotate-6 z-10 cursor-pointer">
           <input
             type="file"
             accept="image/*"
+            // @ts-ignore
             onChange={handleImageUpload}
             className="hidden"
           />
-          <div className="bg-white p-2 rounded-lg shadow-lg relative w-48 h-48 transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
+          <div className="bg-gray-200 p-2 rounded-lg shadow-lg relative w-48 h-48 transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
             {imagePreview ? (
               <>
                 <img
@@ -238,8 +244,8 @@ const TokenForm = () => {
                 </button>
               </>
             ) : (
-              <div className="w-full h-full bg-gray-200 rounded flex flex-col items-center justify-center group">
-                <span className="text-gray-400 group-hover:text-gray-600 transition-colors">
+              <div className="w-full h-full bg-gray-300 rounded flex flex-col items-center justify-center group">
+                <span className="text-gray-600 group-hover:text-gray-800 transition-colors">
                   Click to add image
                 </span>
               </div>
@@ -248,7 +254,7 @@ const TokenForm = () => {
         </label>
 
         <div className="max-w-6xl mx-auto">
-          <p className="text-gray-400 mb-11">
+          <p className="text-gray-600 mb-11">
             Let's create your token and get you started! Fill out the details
             below.
           </p>
@@ -262,7 +268,7 @@ const TokenForm = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 name="name"
-                className="w-[480px]"
+                className="w-[600px]"
               />
               <FormField
                 label="ITS SYMBOL WOULD BE"
@@ -271,7 +277,7 @@ const TokenForm = () => {
                 value={formData.symbol}
                 onChange={handleInputChange}
                 name="symbol"
-                className="w-[570px]"
+                className="w-[650px]"
               />
               <FormField
                 label="WITH DECIMALS OF"
@@ -280,7 +286,7 @@ const TokenForm = () => {
                 value={formData.decimals}
                 onChange={handleInputChange}
                 name="decimals"
-                className="w-[660px]"
+                className="w-[750px]"
               />
               <FormField
                 label="AND SUPPLY OF"
@@ -289,7 +295,7 @@ const TokenForm = () => {
                 value={formData.supply}
                 onChange={handleInputChange}
                 name="supply"
-                className="w-[750px]"
+                className="w-[820px]"
               />
               <FormField
                 label="DESCRIBED AS"
@@ -298,21 +304,34 @@ const TokenForm = () => {
                 value={formData.description}
                 onChange={handleInputChange}
                 name="description"
-                className="w-[900px]"
+                className="w-[850px]"
               />
             </div>
 
             <button
               type="submit"
               disabled={!publicKey || !isFormValid() || isSubmitting}
-              className="mt-8 w-full bg-white text-black py-4 rounded-full text-3xl font-bold hover:bg-gray-200 relative group flex items-center justify-between px-8 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-8 w-full bg-black text-white py-4 rounded-full text-3xl font-bold  relative group flex items-center justify-between px-8 disabled:cursor-not-allowed "
             >
               <span>{isSubmitting ? "Processing..." : "Submit"}</span>
-              <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform">
-                <div className="w-8 h-1 bg-white transform rotate-45 absolute"></div>
-                <div className="w-8 h-1 bg-white transform -rotate-45 absolute"></div>
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center group-hover:rotate-45 transition-transform">
+                <div className="w-8 h-1 bg-gray-800 transform rotate-45 absolute"></div>
+                <div className="w-8 h-1 bg-gray-800 transform -rotate-45 absolute"></div>
               </div>
             </button>
+            <div className="mt-4 text-center text-gray-600">
+              <p>
+                Need Solana tokens for devnet? Get them from the
+                <a
+                  href="https://faucet.solana.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:text-blue-700 underline ml-1"
+                >
+                  Solana Faucet
+                </a>
+              </p>
+            </div>
           </form>
         </div>
 
@@ -322,7 +341,7 @@ const TokenForm = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.9 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black z-50 flex items-center justify-center"
+              className="fixed inset-0 bg-white z-50 flex items-center justify-center"
             >
               <motion.div
                 key={currentStep}
@@ -330,7 +349,7 @@ const TokenForm = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
                 transition={{ duration: 0.5 }}
-                className="text-white text-3xl font-bold"
+                className="text-gray-800 text-3xl font-bold"
               >
                 {steps[currentStep]}
               </motion.div>
@@ -374,6 +393,4 @@ const TokenForm = () => {
       </div>
     </div>
   );
-};
-
-export default TokenForm;
+}

@@ -41,7 +41,7 @@ export default function EnhancedView() {
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 max-w-md">
             Discover timeless elegance and modern design in our curated
-            furniture selection
+            token selection
           </p>
         </div>
 
