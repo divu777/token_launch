@@ -86,6 +86,8 @@ export function CarouselDemo() {
                 <Image
                   src={item.image}
                   alt={item.title}
+                  width={300} // Set the desired width
+                  height={400}
                   layout="fill"
                   objectFit="cover"
                   className="transition-transform duration-300 group-hover:scale-110"
