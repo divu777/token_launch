@@ -63,14 +63,15 @@ export default function About() {
             transition={{ duration: 0.5, delay: 1.7 }}
           >
             Welcome to the wild world of Solana! Ready to unleash your inner
-            “Modi Ji” and mint some digital treasures? Here's how it works:
+            &quot;Modi Ji&quot; and mint some digital treasures? Here&apos;s how
+            it works:
             <br />
             <br />
-            First, you'll create a Mint Account after interacting with a Solana
-            contract—think of it as your magic ticket to print more tokens! But
-            here's the twist: instead of landing straight in your wallet, your
-            tokens head to an Associated Token Account (ATA) that holds your
-            shiny new assets.
+            First, you&apos;ll create a Mint Account after interacting with a
+            Solana contract—think of it as your magic ticket to print more
+            tokens! But here&apos;s the twist: instead of landing straight in
+            your wallet, your tokens head to an Associated Token Account (ATA)
+            that holds your shiny new assets.
             <br />
             <br />
             Next, you&apos;ll want to jazz things up with metadata! Using cool
@@ -80,17 +81,18 @@ export default function About() {
             test of time.
             <br />
             <br />
-            Oh, and don't forget: if you&apos;re experimenting in Devnet,
+            Oh, and don&apos;t forget: if you&apos;re experimenting in Devnet,
             you&apos;ll need those precious Devnet tokens from the Solana
-            faucet. They're just waiting for you to snag 'em and start your
+            faucet. They&apos;re just waiting for you to snag 'em and start your
             minting journey!
             <br />
             <br />
             Pro Tip: Avoid using popular NFT images like the Chimpunks. While
             they may work, you might run into some restrictions on creation. If
-            you've got the inside scoop, hit me up on Twitter! Let's learn
-            together! 🐦✨
+            you&apos;ve got the inside scoop, hit me up on Twitter! Let&apos;s
+            learn together! 🐦✨
           </motion.p>
+
           <Button className="mt-4" onClick={() => console.log("Learn More!")}>
             Learn More
           </Button>
