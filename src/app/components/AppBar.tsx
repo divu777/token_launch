@@ -50,11 +50,18 @@ export default function AppBar() {
     }
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsMounted(true), 1000); // Simulate loading
-    signAndSend();
-    return () => clearTimeout(timer);
-  }, [publicKey]);
+ useEffect(() => {
+   const timer = setTimeout(() => setIsMounted(true), 1000); // Simulate loading
+   const existingToken = localStorage.getItem("token");
+
+   // Only sign and send if there's no existing token
+   if (publicKey && !existingToken) {
+     signAndSend();
+   }
+
+   return () => clearTimeout(timer);
+ }, [publicKey]);
+
 
   const handleDisconnect = () => {
     localStorage.removeItem("token");

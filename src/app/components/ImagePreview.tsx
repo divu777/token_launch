@@ -1,10 +1,11 @@
+import Image from "next/image";
 import React from "react";
 
 const ImagePreview = ({ imagePreview, onRemoveImage }) => {
   return (
     imagePreview && (
       <div className="mt-4">
-        <img
+        <Image
           src={imagePreview}
           alt="Preview"
           className="max-w-xs h-auto rounded shadow-lg"
