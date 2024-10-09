@@ -84,12 +84,12 @@ export function CarouselDemo() {
             <Card className="overflow-hidden">
               <CardContent className="p-0 aspect-[3/4] relative group">
                <Image
-  src={item.image}
-  alt={item.title}
-  fill={true}  // Ensure this is set to true
-  style={{ objectFit: 'cover' }}  // This should work for controlling the fit
-  className="transition-transform duration-300 group-hover:scale-110"
-/>
+                src={item.image}
+               alt={item.title}
+                layout="fill"
+                objectFit="cover"
+                className="transition-transform duration-300 group-hover:scale-110"
+                />
 
                 <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
                   <h3 className="text-white text-xl font-semibold text-center">
