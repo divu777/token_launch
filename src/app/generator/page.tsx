@@ -8,6 +8,7 @@ import { dataType } from "../actions/addToken"
 import AppBar from "../components/AppBar"
 import { createMintAccount, createATAAccount, mintTokens, uploadToIPFS, uploadMetadata, createMetadata } from "../utils/solanaUtils"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 
 interface FormFieldProps {
   label: string;
@@ -231,7 +232,7 @@ export default function TokenForm() {
           <div className="bg-gray-200 p-2 rounded-lg shadow-lg relative w-48 h-48 transition-all duration-200 hover:shadow-2xl hover:-translate-y-1">
             {imagePreview ? (
               <>
-                <img
+                <Image
                   src={imagePreview}
                   alt="Token preview"
                   className="w-full h-full object-cover rounded"
@@ -255,7 +256,7 @@ export default function TokenForm() {
 
         <div className="max-w-6xl mx-auto">
           <p className="text-gray-600 mb-11">
-            Let's create your token and get you started! Fill out the details
+            Let&apos;s create your token and get you started! Fill out the details
             below.
           </p>
 

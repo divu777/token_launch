@@ -17,7 +17,7 @@ const NameUpdatePopup : React.FC<NameUpdatePopupProps> = ({ isOpen, onClose, cur
   const [name, setName] = React.useState(currentName);
   const [isLoading, setIsLoading] = React.useState(false);
   const { toast } = useToast();
-
+// @ts-ignore
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -50,7 +50,7 @@ const NameUpdatePopup : React.FC<NameUpdatePopupProps> = ({ isOpen, onClose, cur
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: "ERROR IN UPDATING NAME",
         duration: 3000,
       });
     } finally {

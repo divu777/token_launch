@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,7 +32,7 @@ export default function AppBar() {
     navItems.push({ name: "Dashboard", href: "/dashboard" });
   }
 
-  const signAndSend = async () => {
+  const signAndSend = useCallback(async () => {
     if (!signMessage || !publicKey) return;
     const existingToken = localStorage.getItem("token");
     if (existingToken) return;
@@ -48,20 +48,20 @@ export default function AppBar() {
     } catch (error) {
       console.error("Error signing message and sending request:", error);
     }
-  };
+  }, [publicKey, signMessage]); // Add dependencies here
 
- useEffect(() => {
-   const timer = setTimeout(() => setIsMounted(true), 1000); // Simulate loading
-   const existingToken = localStorage.getItem("token");
+  // eslint-disable-next-line react/no-unescaped-entities
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 1000); // Simulate loading
+    const existingToken = localStorage.getItem("token");
 
-   // Only sign and send if there's no existing token
-   if (publicKey && !existingToken) {
-     signAndSend();
-   }
+    // Only sign and send if there's no existing token
+    if (publicKey && !existingToken) {
+      signAndSend();
+    }
 
-   return () => clearTimeout(timer);
- }, [publicKey]);
-
+    return () => clearTimeout(timer);
+  }, [publicKey, signAndSend]);
 
   const handleDisconnect = () => {
     localStorage.removeItem("token");

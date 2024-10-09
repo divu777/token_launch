@@ -55,6 +55,7 @@ export default function About() {
           >
             Dive into the Solana Minting Adventure! 🚀
           </motion.h2>
+          {/* eslint-disable-next-line react/no-unescaped-entities */}
           <motion.p
             className="text-md leading-relaxed text-gray-700 w-2/3"
             variants={textVariants}
@@ -83,7 +84,7 @@ export default function About() {
             <br />
             Oh, and don&apos;t forget: if you&apos;re experimenting in Devnet,
             you&apos;ll need those precious Devnet tokens from the Solana
-            faucet. They&apos;re just waiting for you to snag 'em and start your
+            faucet. They&apos;re just waiting for you to snag &apos;em and start your
             minting journey!
             <br />
             <br />
@@ -92,10 +93,7 @@ export default function About() {
             you&apos;ve got the inside scoop, hit me up on Twitter! Let&apos;s
             learn together! 🐦✨
           </motion.p>
-
-          <Button className="mt-4" onClick={() => console.log("Learn More!")}>
-            Learn More
-          </Button>
+         
         </div>
       </div>
       <div className="flex justify-center w-full items-end text-5xl pb-24 mt-24">

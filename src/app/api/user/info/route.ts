@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
 
 
 // update name 
-export async function PUT(req){
+export async function PUT(req: NextRequest) {
   const token = req.headers.get("Authorization")?.replace("Bearer ", "");
   if (!token) {
     console.log("No token found in req headers");
@@ -95,37 +95,35 @@ export async function PUT(req){
   const userId = (<Payload>decoded).userId;
   const walletAddress = (<Payload>decoded).walletAddress;
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-  const body=await req.json();
-  const {name}=body;
+  const body = await req.json();
+  const { name } = body;
 
- try {
-   const userInfo = await prisma.user.update({
-     where: {
-       id: parseInt(userId as string, 10),
-     },
-     data: {
-       name: name,
-     },
-   });
+  try {
+    const userInfo = await prisma.user.update({
+      where: {
+        id: parseInt(userId as string, 10),
+      },
+      data: {
+        name: name,
+      },
+    });
 
-   if (!userInfo) {
-     return NextResponse.json({
-       message: "User not found",
-       status: 404,
-     });
-   }
+    if (!userInfo) {
+      return NextResponse.json({
+        message: "User not found",
+        status: 404,
+      });
+    }
 
-
-   return NextResponse.json({
-     message:"Name Updated successfull",
-     statusCode:200
-   });
- } catch (err) {
-   console.error("Error fetching user data:", err);
-   return NextResponse.json({
-     message: "Error in getting user data",
-     statusCode: 500,
-   });
- }
-
+    return NextResponse.json({
+      message: "Name Updated successfull",
+      statusCode: 200,
+    });
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    return NextResponse.json({
+      message: "Error in getting user data",
+      statusCode: 500,
+    });
+  }
 }

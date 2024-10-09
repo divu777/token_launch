@@ -16,12 +16,13 @@ import {
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 import { createCreateMetadataAccountV3Instruction } from "@metaplex-foundation/mpl-token-metadata";
 import axios from "axios";
+type SignTransaction = (transaction: Transaction) => Promise<Transaction>;
 
 // Create Mint Account
 export const createMintAccount = async (
   connection: Connection,
   publicKey: PublicKey,
-  signTransaction,
+  signTransaction:SignTransaction,
   decimals: unknown
 ) => {
   // Implementation here...
@@ -91,7 +92,7 @@ export const createMintAccount = async (
 export const createATAAccount = async (
   connection: Connection,
   publicKey: PublicKey,
-  signTransaction,
+  signTransaction:SignTransaction,
   mintAddress: PublicKey
 ) => {
   // Implementation here...
@@ -154,7 +155,7 @@ export const createATAAccount = async (
 export const mintTokens = async (
   connection: Connection,
   publicKey: PublicKey,
-  signTransaction,
+  signTransaction:SignTransaction,
   ataAddress: PublicKey,
   mintAddress: PublicKey
 ) => {
@@ -211,7 +212,7 @@ export const mintTokens = async (
 export const createMetadata = async (
   connection: Connection,
   publicKey: PublicKey,
-  signTransaction,
+  signTransaction:SignTransaction,
   metadataUri: string,
   mintAddress: PublicKey,
   name: string,

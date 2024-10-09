@@ -36,7 +36,7 @@ export default function Component() {
   const [loading, setLoading] = useState(true)
 
 
-  const handleUpdateName = (newName:String) => {
+  const handleUpdateName = (newName: any) => {
     setUserDetails(prev => prev ? { ...prev, name: newName } : null);
   };
   useEffect(() => {
