@@ -83,7 +83,7 @@ export function CarouselDemo() {
           <CarouselItem key={item.id} className="pl-2 md:pl-4 md:basis-1/3">
             <Card className="overflow-hidden">
               <CardContent className="p-0 aspect-[3/4] relative group">
-                <Image
+                <img
                   src={item.image}
                   alt={item.title}
                   fill
